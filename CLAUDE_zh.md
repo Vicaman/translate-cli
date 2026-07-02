@@ -1,11 +1,54 @@
 # CLAUDE.md
 
-减少常见 LLM 编码错误的行为指南。
-根据需要与项目特定说明合并使用。
+本文件为在此仓库中工作的 Claude Code（claude.ai/code）提供指导。
 
-**权衡：** 这些指南偏向谨慎而非速度。对于简单任务，请自行判断。
+## 仓库概览
 
-## 1. 先思考再编码
+这是一个 **Claude Code 个人配置单体仓库**——不是传统的软件项目。它存放自定义斜杠命令、代理定义、可复用技能、提示词和工具脚本。仓库位于 `D:\claudegithub`，辅助工作目录为 `C:\Users\c_w_l`，用于用户级 Claude 配置（~/.claude/rules/、~/.claude/agents/、~/.claude/settings.json）。
+
+### 目录结构
+
+| 目录 | 用途 |
+|-----------|---------|
+| `.claude/` | 项目级 Claude Code 配置：`settings.json`、`settings.local.json` 和 `commands/`（自定义斜杠命令） |
+| `01-slash-commands/` | 自定义斜杠命令的源文件；激活时复制到 `.claude/commands/` |
+| `agenthub/` | 通过 VS Code "Agent Resources" 扩展供团队使用的共享代理/技能/提示词注册中心 |
+| `agenthub/.agents/` | 代理定义（`*.agent.md`） |
+| `agenthub/.skills/` | 可复用技能（包含 `SKILL.md` 的子目录） |
+| `agenthub/.prompts/` | 可复用提示词模板（`*.prompt.md`） |
+| `claude-Re/` | 独立的 Claude Code 实验仓库（被引用，非子模块） |
+| `test/` | Python 工具脚本（基于 DeepSeek API 的文本摘要和翻译） |
+
+### 自定义斜杠命令
+
+- **`/optimize`** — 分析代码库的性能、可读性和可维护性改进点。源文件位于 `01-slash-commands/optimize.md`，安装位置为 `.claude/commands/optimize.md`。
+
+### 设置
+
+- `.claude/settings.json` — 项目级：允许读取 `C:\Users\c_w_l` 下的文件，并将其添加为额外工作目录。
+- `.claude/settings.local.json` — 本地覆盖：允许 `WebFetch`（github.com）、`WebSearch`、`git *` 命令，以及安装 optimize 斜杠命令的复制命令。
+- `~/.claude/settings.json` 中的用户级配置全局控制权限、钩子和模型偏好。
+
+### Python 脚本（`test/`）
+
+- `summarizer.py` — 通过 DeepSeek API 将中文文本总结为一句话。
+- `translate.py` — 基于 DeepSeek API 的命令行翻译工具（中英互译）。支持 `-i`/`-o` 文件输入输出和 `--to` 指定目标语言。
+
+**必需环境变量：** `DEEPSEEK_API_KEY` 必须在 `.env` 或环境变量中设置。脚本使用 `openai` 包并指向 `https://api.deepseek.com`。
+
+```bash
+# 运行翻译工具
+python test/translate.py "你好世界" --to 英文
+python test/translate.py -i input.txt -o output.txt --to 中文
+```
+
+---
+
+## 行为指南
+
+减少常见 LLM 编码错误的指南。**权衡：**偏向谨慎而非速度。对于简单任务，请自行判断。
+
+### 1. 先思考再编码
 
 **不要假设。不要隐藏困惑。明确呈现权衡方案。**
 

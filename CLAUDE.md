@@ -1,11 +1,54 @@
 # CLAUDE.md
 
-Behavioral guidelines to reduce common LLM coding mistakes.
-Merge with project-specific instructions as needed.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-**Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
+## Repository Overview
 
-## 1. Think Before Coding
+This is a **Claude Code personal configuration monorepo** — not a traditional software project. It stores custom slash commands, agent definitions, reusable skills, prompts, and utility scripts. The repo lives at `D:\claudegithub` with a secondary working directory at `C:\Users\c_w_l` for user-level Claude config (~/.claude/rules/, ~/.claude/agents/, ~/.claude/settings.json).
+
+### Directory Map
+
+| Directory | Purpose |
+|-----------|---------|
+| `.claude/` | Project-level Claude Code config: `settings.json`, `settings.local.json`, and `commands/` (custom slash commands) |
+| `01-slash-commands/` | Source originals for custom slash commands; copied into `.claude/commands/` when activated |
+| `agenthub/` | Shared agent/skill/prompt registry for team use via VS Code "Agent Resources" extension |
+| `agenthub/.agents/` | Agent definitions (`*.agent.md`) |
+| `agenthub/.skills/` | Reusable skills (subdirectories containing `SKILL.md`) |
+| `agenthub/.prompts/` | Reusable prompt templates (`*.prompt.md`) |
+| `claude-Re/` | Separate git repo for Claude Code experiments (referenced, not a submodule) |
+| `test/` | Python utility scripts (DeepSeek API wrappers for summarization and translation) |
+
+### Custom Slash Commands
+
+- **`/optimize`** — Analyzes codebase for performance, readability, and maintainability improvements. Source at `01-slash-commands/optimize.md`, installed at `.claude/commands/optimize.md`.
+
+### Settings
+
+- `.claude/settings.json` — Project-level: allows reads under `C:\Users\c_w_l` and adds it as an additional working directory.
+- `.claude/settings.local.json` — Local overrides: allows `WebFetch` (github.com), `WebSearch`, `git *` commands, and the copy command that installs the optimize slash command.
+- User-level config at `~/.claude/settings.json` controls permissions, hooks, and model preferences globally.
+
+### Python Scripts (`test/`)
+
+- `summarizer.py` — Summarizes Chinese text to one sentence via DeepSeek API.
+- `translate.py` — CLI translation tool (Chinese ↔ English) via DeepSeek API. Supports `-i`/`-o` for file I/O and `--to` for target language.
+
+**Required env var:** `DEEPSEEK_API_KEY` must be set in `.env` or environment. Scripts use `openai` package pointed at `https://api.deepseek.com`.
+
+```bash
+# Run the translator
+python test/translate.py "你好世界" --to 英文
+python test/translate.py -i input.txt -o output.txt --to 中文
+```
+
+---
+
+## Behavioral Guidelines
+
+Guidelines to reduce common LLM coding mistakes. **Tradeoff:** bias toward caution over speed. For trivial tasks, use judgment.
+
+### 1. Think Before Coding
 
 **Don't assume. Don't hide confusion. Surface tradeoffs.**
 

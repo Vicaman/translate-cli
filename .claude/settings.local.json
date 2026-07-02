@@ -2,7 +2,14 @@
   "permissions": {
     "allow": [
       "WebFetch(domain:github.com)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(git *)",
+      "Bash(mkdir -p d:/claudegithub/01-slash-commands d:/claudegithub/.claude/commands)",
+      "Bash(cp d:/claudegithub/01-slash-commands/optimize.md d:/claudegithub/.claude/commands/optimize.md)"
+    ],
+    "additionalDirectories": [
+      "d:\\claudegithub\\.claude",
+      "d:\\claudegithub\\.claude\\commands"
     ]
   }
 }
